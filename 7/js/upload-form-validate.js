@@ -1,4 +1,3 @@
-import '/pristine/pristine.min.js';
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadFormHashtag = uploadForm.querySelector('.text__hashtags');
 
