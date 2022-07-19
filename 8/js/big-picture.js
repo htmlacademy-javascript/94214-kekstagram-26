@@ -22,8 +22,8 @@ const openBigPicture = (pictureData) => {
   let startCommentsIndex = 0;
   const getComments = () => {
     const allComments = COMMENTS.slice();
-    const lisibleComments = allComments.splice(startCommentsIndex, NUMBER_OF_VISIBLE_COMMENTS);
-    lisibleComments.forEach((comment) => {
+    const visibleComments = allComments.splice(startCommentsIndex, NUMBER_OF_VISIBLE_COMMENTS);
+    visibleComments.forEach((comment) => {
       const newComment = document.createElement('li');
       newComment.classList.add('social__comment');
       const newCommentImage = document.createElement('img');
