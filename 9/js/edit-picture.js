@@ -8,6 +8,48 @@ const effectsList = document.querySelector('.effects__list');
 const MIN_SCALE_IMAGE = 0.25;
 const MAX_SCALE_IMAGE = 1;
 const SCALE_IMAGE_STEP = 0.25;
+const EFFECTS = {
+  chrome: {
+    name: 'grayscale',
+    min: 0,
+    max: 1,
+    step: 0.1,
+    units: '',
+    decimal: 1
+  },
+  sepia: {
+    name: 'sepia',
+    min: 0,
+    max: 1,
+    step: 0.1,
+    units: '',
+    decimal: 1
+  },
+  marvin: {
+    name: 'invert',
+    min: 0,
+    max: 100,
+    step: 1,
+    units: '%',
+    decimal: 0
+  },
+  phobos: {
+    name: 'blur',
+    min: 0,
+    max: 3,
+    step: 0.1,
+    units: 'px',
+    decimal: 1
+  },
+  heat: {
+    name: 'brightness',
+    min: 1,
+    max: 3,
+    step: 0.1,
+    units: '',
+    decimal: 1
+  }
+};
 
 const zoomIn = () => {
   let scaleValue = Number(scaleInputElement.value.replace('%', '')) / 100;
@@ -37,49 +79,6 @@ noUiSlider.create(sliderElement, {
   connect: 'lower',
 });
 
-const effects = {
-  chrome: {
-    name: 'grayscale',
-    min: 0,
-    max: 1,
-    step: 0.1,
-    units: '',
-    fixed: 1
-  },
-  sepia: {
-    name: 'sepia',
-    min: 0,
-    max: 1,
-    step: 0.1,
-    units: '',
-    fixed: 1
-  },
-  marvin: {
-    name: 'invert',
-    min: 0,
-    max: 100,
-    step: 1,
-    units: '%',
-    fixed: 0
-  },
-  phobos: {
-    name: 'blur',
-    min: 0,
-    max: 3,
-    step: 0.1,
-    units: 'px',
-    fixed: 1
-  },
-  heat: {
-    name: 'brightness',
-    min: 1,
-    max: 3,
-    step: 0.1,
-    units: '',
-    fixed: 1
-  }
-};
-
 const applyEffect = (event) => {
   imageElement.removeAttribute('class');
   imageElement.removeAttribute('style');
@@ -88,7 +87,7 @@ const applyEffect = (event) => {
     const effectClass = `effects__preview--${event.target.value}`;
     imageElement.classList.add(effectClass);
     const activeEffect = effectsList.querySelector('[type="radio"]:checked').value;
-    const effect = effects[activeEffect];
+    const effect = EFFECTS[activeEffect];
     sliderElement.noUiSlider.updateOptions({
       range: {
         min: effect.min,
@@ -108,8 +107,8 @@ const changeEffect = () => {
   const sliderValue = sliderElement.noUiSlider.get();
   const activeEffect = effectsList.querySelector('[type="radio"]:checked').value;
   if (activeEffect !== 'none') {
-    const effect = effects[activeEffect];
-    const filterValue = Number(sliderValue).toFixed(effect.fixed);
+    const effect = EFFECTS[activeEffect];
+    const filterValue = Number(sliderValue).toFixed(effect.decimal);
     const styleValue = `filter: ${effect.name}(${filterValue}${effect.units})`;
     imageElement.setAttribute('style', styleValue);
     effectLevelInputElement.value = filterValue;
