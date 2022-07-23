@@ -51,13 +51,16 @@ const EFFECTS = {
   }
 };
 
+let scale = '';
+
 const zoomIn = () => {
   let scaleValue = Number(scaleInputElement.value.replace('%', '')) / 100;
   if (scaleValue > MIN_SCALE_IMAGE) {
     scaleValue -= SCALE_IMAGE_STEP;
   }
   scaleInputElement.value = `${(scaleValue * 100).toFixed(0)}%`;
-  imageElement.style.transform = `scale(${scaleValue})`;
+  scale = `scale(${scaleValue})`;
+  imageElement.style.transform = scale;
 };
 
 const zoomOut = () => {
@@ -66,7 +69,8 @@ const zoomOut = () => {
     scaleValue += SCALE_IMAGE_STEP;
   }
   scaleInputElement.value = `${(scaleValue * 100).toFixed(0)}%`;
-  imageElement.style.transform = `scale(${scaleValue})`;
+  scale = `scale(${scaleValue})`;
+  imageElement.style.transform = scale;
 };
 
 noUiSlider.create(sliderElement, {
@@ -82,6 +86,9 @@ noUiSlider.create(sliderElement, {
 const applyEffect = (event) => {
   imageElement.removeAttribute('class');
   imageElement.removeAttribute('style');
+  if (scale) {
+    imageElement.setAttribute('style', `transform: ${scale};`);
+  }
   if (!event.target.matches('#effect-none')) {
     sliderContainer.classList.remove('hidden');
     const effectClass = `effects__preview--${event.target.value}`;
@@ -100,6 +107,7 @@ const applyEffect = (event) => {
   } else {
     sliderContainer.classList.add('hidden');
     effectLevelInputElement.value = '';
+    scale = '';
   }
 };
 
@@ -109,7 +117,12 @@ const changeEffect = () => {
   if (activeEffect !== 'none') {
     const effect = EFFECTS[activeEffect];
     const filterValue = Number(sliderValue).toFixed(effect.decimal);
-    const styleValue = `filter: ${effect.name}(${filterValue}${effect.units})`;
+    let styleValue = '';
+    if (scale) {
+      styleValue = `transform: ${scale}; filter: ${effect.name}(${filterValue}${effect.units})`;
+    } else {
+      styleValue = `filter: ${effect.name}(${filterValue}${effect.units})`;
+    }
     imageElement.setAttribute('style', styleValue);
     effectLevelInputElement.value = filterValue;
   } else {
@@ -117,10 +130,19 @@ const changeEffect = () => {
   }
 };
 
+const resetEffect = () => {
+  imageElement.removeAttribute('class');
+  imageElement.removeAttribute('style');
+  effectLevelInputElement.value = '';
+  sliderContainer.classList.add('hidden');
+  scale = '';
+};
+
 sliderElement.noUiSlider.on('update', changeEffect);
 
 export {
   zoomIn,
   zoomOut,
-  applyEffect
+  applyEffect,
+  resetEffect
 };

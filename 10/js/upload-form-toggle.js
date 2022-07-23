@@ -4,7 +4,8 @@ import {
 import {
   zoomIn,
   zoomOut,
-  applyEffect
+  applyEffect,
+  resetEffect
 } from './edit-picture.js';
 
 const body = document.querySelector('body');
@@ -39,6 +40,7 @@ function closeUploadForm() {
   scaleBigger.removeEventListener('click', zoomOut);
   effectsList.removeEventListener('change', applyEffect);
   uploadForm.reset();
+  resetEffect();
 }
 
 function onPopupEscKeydown(event) {
