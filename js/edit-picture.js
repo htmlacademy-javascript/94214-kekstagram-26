@@ -1,9 +1,9 @@
 const imageElement = document.querySelector('.img-upload__preview img');
-const sliderContainer = document.querySelector('.img-upload__effect-level');
+const sliderContainerElement = document.querySelector('.img-upload__effect-level');
 const sliderElement = document.querySelector('.effect-level__slider');
 const scaleInputElement = document.querySelector('.scale__control--value');
 const effectLevelInputElement = document.querySelector('.effect-level__value');
-const effectsList = document.querySelector('.effects__list');
+const effectsListElement = document.querySelector('.effects__list');
 
 const MIN_SCALE_IMAGE = 0.25;
 const MAX_SCALE_IMAGE = 1;
@@ -83,17 +83,17 @@ noUiSlider.create(sliderElement, {
   connect: 'lower',
 });
 
-const applyEffect = (event) => {
+const applyEffect = (evt) => {
   imageElement.removeAttribute('class');
   imageElement.removeAttribute('style');
   if (scale) {
     imageElement.setAttribute('style', `transform: ${scale};`);
   }
-  if (!event.target.matches('#effect-none')) {
-    sliderContainer.classList.remove('hidden');
-    const effectClass = `effects__preview--${event.target.value}`;
+  if (!evt.target.matches('#effect-none')) {
+    sliderContainerElement.classList.remove('hidden');
+    const effectClass = `effects__preview--${evt.target.value}`;
     imageElement.classList.add(effectClass);
-    const activeEffect = effectsList.querySelector('[type="radio"]:checked').value;
+    const activeEffect = effectsListElement.querySelector('[type="radio"]:checked').value;
     const effect = EFFECTS[activeEffect];
     sliderElement.noUiSlider.updateOptions({
       range: {
@@ -105,17 +105,14 @@ const applyEffect = (event) => {
     });
     effectLevelInputElement.value = effect.max;
   } else {
-    imageElement.removeAttribute('style');
-    sliderContainer.classList.add('hidden');
+    sliderContainerElement.classList.add('hidden');
     effectLevelInputElement.value = '';
-    scaleInputElement.value = '100%';
-    scale = '';
   }
 };
 
 const changeEffect = () => {
   const sliderValue = sliderElement.noUiSlider.get();
-  const activeEffect = effectsList.querySelector('[type="radio"]:checked').value;
+  const activeEffect = effectsListElement.querySelector('[type="radio"]:checked').value;
   if (activeEffect !== 'none') {
     const effect = EFFECTS[activeEffect];
     const filterValue = Number(sliderValue).toFixed(effect.decimal);
@@ -134,9 +131,9 @@ const changeEffect = () => {
 
 const resetEffect = () => {
   imageElement.removeAttribute('class');
-  imageElement.removeAttribute('style');
-  sliderContainer.classList.add('hidden');
+  sliderContainerElement.classList.add('hidden');
   effectLevelInputElement.value = '';
+  imageElement.removeAttribute('style');
   scaleInputElement.value = '100%';
   scale = '';
 };

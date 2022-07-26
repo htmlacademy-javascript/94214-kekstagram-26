@@ -9,42 +9,43 @@ import {
 } from './edit-picture.js';
 
 const body = document.querySelector('body');
-const uploadOverlay = document.querySelector('.img-upload__overlay');
+const uploadOverlayElement = document.querySelector('.img-upload__overlay');
 const uploadForm = document.querySelector('#upload-select-image');
 const uploadFormFileInput = uploadForm.querySelector('#upload-file');
-const uploadFormClose = uploadForm.querySelector('#upload-cancel');
-const uploadFormHashtag = uploadForm.querySelector('.text__hashtags');
-const uploadFormComment = uploadForm.querySelector('.text__description');
-const scaleSmaller = uploadForm.querySelector('.scale__control--smaller');
-const scaleBigger = uploadForm.querySelector('.scale__control--bigger');
-const effectsList = uploadForm.querySelector('.effects__list');
+const uploadFormCloseButton = uploadForm.querySelector('#upload-cancel');
+const uploadFormHashtagInput = uploadForm.querySelector('.text__hashtags');
+const uploadFormCommentTextarea = uploadForm.querySelector('.text__description');
+const scaleSmallerButton = uploadForm.querySelector('.scale__control--smaller');
+const scaleBiggerButton = uploadForm.querySelector('.scale__control--bigger');
+const effectsListElement = uploadForm.querySelector('.effects__list');
 
 const openUploadForm = () => {
-  uploadOverlay.classList.remove('hidden');
+  uploadOverlayElement.classList.remove('hidden');
   body.classList.add('modal-open');
   document.addEventListener('keydown', onPopupEscKeydown);
-  uploadFormClose.addEventListener('click', closeUploadForm);
+  uploadFormCloseButton.addEventListener('click', closeUploadForm);
   uploadForm.addEventListener('submit', onUploadFormSubmit);
-  scaleSmaller.addEventListener('click', zoomIn);
-  scaleBigger.addEventListener('click', zoomOut);
-  effectsList.addEventListener('change', applyEffect);
+  scaleSmallerButton.addEventListener('click', zoomIn);
+  scaleBiggerButton.addEventListener('click', zoomOut);
+  effectsListElement.addEventListener('change', applyEffect);
 };
 
 function closeUploadForm() {
-  uploadOverlay.classList.add('hidden');
+  uploadOverlayElement.classList.add('hidden');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onPopupEscKeydown);
-  uploadFormClose.removeEventListener('click', closeUploadForm);
+  uploadFormCloseButton.removeEventListener('click', closeUploadForm);
   uploadForm.removeEventListener('submit', onUploadFormSubmit);
-  scaleSmaller.removeEventListener('click', zoomIn);
-  scaleBigger.removeEventListener('click', zoomOut);
-  effectsList.removeEventListener('change', applyEffect);
+  scaleSmallerButton.removeEventListener('click', zoomIn);
+  scaleBiggerButton.removeEventListener('click', zoomOut);
+  effectsListElement.removeEventListener('change', applyEffect);
   uploadForm.reset();
   resetEffect();
 }
 
-function onPopupEscKeydown(event) {
-  if (event.key === 'Escape' && ![uploadFormComment, uploadFormHashtag].includes(document.activeElement) && !document.includes('.error')) {
+function onPopupEscKeydown(evt) {
+  const errorBlock = document.querySelector('.error');
+  if (evt.key === 'Escape' && ![uploadFormCommentTextarea, uploadFormHashtagInput].includes(document.activeElement) && !errorBlock) {
     closeUploadForm();
   }
 }

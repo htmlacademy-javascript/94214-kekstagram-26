@@ -15,14 +15,14 @@ const showResultMessage = (status) => {
     statusBlock.removeEventListener('click', closeStatusMessage);
   };
 
-  function onStatusBlockClick(event) {
-    if (event.target.matches(`.${status}__button`) || event.target.matches(`.${status}`)) {
+  function onStatusBlockClick(evt) {
+    if (evt.target.matches(`.${status}__button`) || evt.target.matches(`.${status}`)) {
       closeStatusMessage();
     }
   }
 
-  function onStatusMessageEscKeydown(event) {
-    if (event.key === 'Escape') {
+  function onStatusMessageEscKeydown(evt) {
+    if (evt.key === 'Escape') {
       closeStatusMessage();
     }
   }

@@ -1,64 +1,60 @@
 import {
   generateThumbs
 } from './thumbs.js';
-import {
-  debounce
-} from './functions.js';
 
-const filterButtonsElements = document.querySelectorAll('.img-filters__button');
-const filterDefaultElement = document.querySelector('#filter-default');
-const filterRandomElement = document.querySelector('#filter-random');
-const filterDiscussedElement = document.querySelector('#filter-discussed');
+const filterButtons = document.querySelectorAll('.img-filters__button');
+const filterDefaultButton = document.querySelector('#filter-default');
+const filterRandomButton = document.querySelector('#filter-random');
+const filterDiscussedButton = document.querySelector('#filter-discussed');
 
 const NUMBER_OF_RANDOM_PHOTOS = 10;
-const DELAY = 500;
-
-let filterData = '';
 
 const clearThumbs = () => {
-  const picturesElements = document.querySelectorAll('.picture');
-  picturesElements.forEach((picture) => {
+  const pictures = document.querySelectorAll('.picture');
+  pictures.forEach((picture) => {
     picture.remove();
   });
 };
 
 const clearFilterButtonClass = () => {
-  filterButtonsElements.forEach((button) => {
+  filterButtons.forEach((button) => {
     button.classList.remove('img-filters__button--active');
   });
 };
 
-const viewDefaultPhotos = () => {
+const viewDefaultPhotos = (photos) => {
   clearFilterButtonClass();
-  filterDefaultElement.classList.add('img-filters__button--active');
+  filterDefaultButton.classList.add('img-filters__button--active');
   clearThumbs();
-  generateThumbs(filterData);
+  generateThumbs(photos);
 };
 
-const viewRandomPhotos = () => {
+const viewRandomPhotos = (photos) => {
   clearFilterButtonClass();
-  filterRandomElement.classList.add('img-filters__button--active');
+  filterRandomButton.classList.add('img-filters__button--active');
   clearThumbs();
-  const randomPhotos = filterData.slice().sort(() => Math.random() - 0.5).slice(0, NUMBER_OF_RANDOM_PHOTOS);
+  const randomPhotos = photos.slice().sort(() => Math.random() - 0.5).slice(0, NUMBER_OF_RANDOM_PHOTOS);
   generateThumbs(randomPhotos);
 };
 
-const viewDiscussedPhotos = () => {
+const viewDiscussedPhotos = (photos) => {
   clearFilterButtonClass();
-  filterDiscussedElement.classList.add('img-filters__button--active');
+  filterDiscussedButton.classList.add('img-filters__button--active');
   clearThumbs();
-  const discussedPhotos = filterData.slice().sort((a, b) => b.comments.length - a.comments.length);
+  const discussedPhotos = photos.slice().sort((a, b) => b.comments.length - a.comments.length);
   generateThumbs(discussedPhotos);
 };
 
-const getFilterData = (posts) => {
-  filterData = posts;
+const onFilterButtonsClick = (photos) => (evt) => {
+  if (evt.target.matches('#filter-default')) {
+    viewDefaultPhotos(photos);
+  } else if (evt.target.matches('#filter-random')) {
+    viewRandomPhotos(photos);
+  } else if (evt.target.matches('#filter-discussed')) {
+    viewDiscussedPhotos(photos);
+  }
 };
 
-filterDefaultElement.addEventListener('click', debounce(viewDefaultPhotos, DELAY));
-filterRandomElement.addEventListener('click', debounce(viewRandomPhotos, DELAY));
-filterDiscussedElement.addEventListener('click', debounce(viewDiscussedPhotos, DELAY));
-
 export {
-  getFilterData
+  onFilterButtonsClick
 };
