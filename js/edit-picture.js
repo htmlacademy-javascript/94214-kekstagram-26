@@ -116,12 +116,9 @@ const changeEffect = () => {
   if (activeEffect !== 'none') {
     const effect = EFFECTS[activeEffect];
     const filterValue = Number(sliderValue).toFixed(effect.decimal);
-    let styleValue = '';
-    if (scale) {
-      styleValue = `transform: ${scale}; filter: ${effect.name}(${filterValue}${effect.units})`;
-    } else {
-      styleValue = `filter: ${effect.name}(${filterValue}${effect.units})`;
-    }
+    const scaleStyle = scale ? `transform: ${scale}; ` : '';
+    const filterStyle = `filter: ${effect.name}(${filterValue}${effect.units})`;
+    const styleValue = scaleStyle + filterStyle;
     imageElement.setAttribute('style', styleValue);
     effectLevelInputElement.value = filterValue;
   } else {

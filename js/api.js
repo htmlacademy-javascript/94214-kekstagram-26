@@ -1,3 +1,6 @@
+const DOWNLOAD_ERROR = 'При загрузке данных с сервера произошла ошибка!';
+const UPLOAD_ERROR = 'Ошибка сервера. Не удалось отправить данные!';
+
 const getData = (onSuccess, onFail) => {
   fetch('https://26.javascript.pages.academy/kekstagram/data')
     .then((response) => response.json())
@@ -5,7 +8,7 @@ const getData = (onSuccess, onFail) => {
       onSuccess(posts);
     })
     .catch(() => {
-      onFail('При загрузке данных с сервера произошла ошибка!');
+      onFail(DOWNLOAD_ERROR);
     });
 };
 
@@ -21,11 +24,11 @@ const sendData = (onSuccess, onFail, body) => {
       if (response.ok) {
         onSuccess();
       } else {
-        onFail('Ошибка сервера. Не удалось отправить данные!');
+        onFail(UPLOAD_ERROR);
       }
     })
     .catch(() => {
-      onFail('Ошибка сервера. Не удалось отправить данные!');
+      onFail(UPLOAD_ERROR);
     });
 };
 

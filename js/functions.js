@@ -10,7 +10,7 @@ const getRandomNumber = (startNumber, finishNumber) => {
   const roundedStartNumber = Math.ceil(startNumber);
   const roundedFinishNumber = Math.floor(finishNumber);
   let randomNumber = Math.round(Math.random() * (roundedFinishNumber - roundedStartNumber) + roundedStartNumber);
-  if (typeof startNumber !== 'number' || typeof finishNumber !== 'number' || startNumber < 0 || finishNumber < 0 || roundedStartNumber > roundedFinishNumber) {
+  if (startNumber < 0 || finishNumber < 0 || roundedStartNumber > roundedFinishNumber) {
     randomNumber = 0;
   }
   return randomNumber;
